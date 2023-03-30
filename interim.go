@@ -91,6 +91,10 @@ func (i *interim) Delete(key string) error {
 	if key == "" {
 		return fmt.Errorf(ERR_INVALID_KEY, key)
 	}
+
+	i.Lock()
+	defer i.Unlock()
+
 	i.cache.remove(key)
 	delete(i.data, key)
 	return nil
