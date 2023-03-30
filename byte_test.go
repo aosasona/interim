@@ -1,7 +1,6 @@
 package interim
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -15,17 +14,18 @@ func Test_encodeToByte(t *testing.T) {
 		want    []byte
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "encode byte",
+			args:    args{data: "hi"},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := encodeToByte(tt.args.data)
+			_, err := encodeToByte(tt.args.data)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("encodeToByte() error = %v, wantErr %v", err, tt.wantErr)
 				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("encodeToByte() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -34,19 +34,27 @@ func Test_encodeToByte(t *testing.T) {
 func Test_decodeFromByte(t *testing.T) {
 	type args struct {
 		encoded []byte
-		target  any
 	}
+	target := ""
 	tests := []struct {
 		name    string
 		args    args
+		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "decode bytes",
+			args: args{
+				encoded: []byte{5, 12, 0, 2, 104, 105},
+			},
+			want:    "hi",
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := decodeFromByte(tt.args.encoded, tt.args.target); (err != nil) != tt.wantErr {
-				t.Errorf("decodeFromByte() error = %v, wantErr %v", err, tt.wantErr)
+			if err := decodeFromByte(tt.args.encoded, &target); (err != nil) != tt.wantErr || target != tt.want {
+				t.Errorf("decodeFromByte() error = %v, wantErr %v -- decoded: %v, expected: %v", err, tt.wantErr, target, tt.want)
 			}
 		})
 	}

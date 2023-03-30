@@ -59,6 +59,13 @@ func (l *lruCache) put(key string, value any) {
 	return
 }
 
+func (l *lruCache) remove(key string) {
+	if entry, hit := l.cache[key]; hit {
+		l.list.Remove(entry)
+		delete(l.cache, entry.Value.(*cacheEntry).key)
+	}
+}
+
 func (l *lruCache) len() int {
 	return l.list.Len()
 }
